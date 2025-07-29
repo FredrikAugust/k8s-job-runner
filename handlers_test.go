@@ -2,10 +2,13 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	batchv1 "k8s.io/api/batch/v1"
 )
 
 func TestHandleHealth(t *testing.T) {
@@ -22,6 +25,11 @@ func TestHandleHealth(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v",
 			status, http.StatusOK)
 	}
+}
+
+func (a *App) ServeHTTP(rr http.ResponseWriter, req *http.Request) {
+	handler := http.HandlerFunc(a.handleCreateJob)
+	handler.ServeHTTP(rr, req)
 }
 
 func TestHandleCreateJob(t *testing.T) {
@@ -75,9 +83,15 @@ func TestHandleCreateJob(t *testing.T) {
 			}
 			req.Header.Set("Content-Type", "application/json")
 
+			mockJobService := &MockJobService{
+				CreateJobFunc: func(ctx context.Context, job *batchv1.Job) (*batchv1.Job, error) {
+					return job, nil
+				},
+			}
+			app := &App{jobService: mockJobService}
+
 			rr := httptest.NewRecorder()
-			handler := http.HandlerFunc(handleCreateJob)
-			handler.ServeHTTP(rr, req)
+			app.ServeHTTP(rr, req)
 
 			if status := rr.Code; status != tt.expectedStatus {
 				t.Errorf("handler returned wrong status code: got %v want %v",

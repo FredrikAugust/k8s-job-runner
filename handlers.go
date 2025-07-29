@@ -4,17 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/client-go/kubernetes"
 )
 
-func handleCreateJob(w http.ResponseWriter, r *http.Request) {
+func (a *App) handleCreateJob(w http.ResponseWriter, r *http.Request) {
 	var req JobRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -24,19 +22,6 @@ func handleCreateJob(w http.ResponseWriter, r *http.Request) {
 
 	if len(req.Command) < 1 {
 		http.Error(w, "command must include at least one part", 400)
-		return
-	}
-
-	config, err := getKubeConfig()
-	if err != nil {
-		log.Println("could not get kubernetes connection", err.Error())
-		http.Error(w, "could not get valid kubernetes configuration", 500)
-		return
-	}
-
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		http.Error(w, "failed to initialize connection to kubernetes cluster", 500)
 		return
 	}
 
@@ -60,8 +45,7 @@ func handleCreateJob(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	jobClient := clientset.BatchV1().Jobs("default")
-	createdJob, err := jobClient.Create(context.TODO(), job, metav1.CreateOptions{})
+	createdJob, err := a.jobService.CreateJob(context.TODO(), job)
 	if err != nil {
 		http.Error(w, "failed to create job", 500)
 		return

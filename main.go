@@ -6,7 +6,12 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"k8s.io/client-go/kubernetes"
 )
+
+type App struct {
+	jobService JobService
+}
 
 var requestCounter = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
@@ -33,8 +38,24 @@ func withMetrics(next http.Handler) http.Handler {
 }
 
 func main() {
+	config, err := getKubeConfig()
+	if err != nil {
+		log.Println("could not get kubernetes configuration", err.Error())
+		return
+	}
+
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		log.Println("could not get kubernetes connection", err.Error())
+		return
+	}
+
+	app := &App{
+		jobService: NewK8sClient(clientset, "default"),
+	}
+
 	http.Handle("/health", withMetrics(http.HandlerFunc(handleHealth)))
-	http.Handle("/jobs", withMetrics(http.HandlerFunc(handleCreateJob)))
+	http.Handle("/jobs", withMetrics(http.HandlerFunc(app.handleCreateJob)))
 
 	http.Handle("/metrics", promhttp.Handler())
 
