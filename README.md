@@ -48,7 +48,11 @@ curl -X POST http://localhost:8084/jobs \
 
 The service uses your local kubeconfig or in-cluster config when deployed. Defaults: `alpine` image, `default` namespace.
 
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
 ---
 
 > [!NOTE]
-> AI was used extensively in this project for writing commit messages, README documentation, and tests, along with continuous code review. This was done to maximize learning and focus on the interesting architectural and implementation challenges.
+> AI was used in this project for writing commit messages, README documentation, and tests, along with continuous code review. This was done to maximize learning and focus on the interesting architectural and implementation challenges.
