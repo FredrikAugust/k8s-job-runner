@@ -16,6 +16,18 @@ curl -X POST http://localhost:8084/jobs \
   -d '{"name": "my-job", "command": ["echo", "hello world"]}'
 ```
 
+With custom image and namespace:
+```bash
+curl -X POST http://localhost:8084/jobs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "my-job",
+    "command": ["python", "-c", "print(\"Hello\")"],
+    "image": "python:3.9-slim",
+    "k8s_namespace": "custom-namespace"
+  }'
+```
+
 ## Endpoints
 
 - `POST /jobs` - Create a new job
@@ -24,4 +36,4 @@ curl -X POST http://localhost:8084/jobs \
 
 ## Configuration
 
-The service uses your local kubeconfig or in-cluster config when deployed. Jobs are created in the `default` namespace.
+The service uses your local kubeconfig or in-cluster config when deployed. Defaults: `alpine` image, `default` namespace.
