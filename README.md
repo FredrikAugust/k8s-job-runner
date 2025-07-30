@@ -47,3 +47,8 @@ curl -X POST http://localhost:8084/jobs \
 ## Configuration
 
 The service uses your local kubeconfig or in-cluster config when deployed. Defaults: `alpine` image, `default` namespace.
+
+---
+
+> [!NOTE]
+> AI was used extensively in this project for writing commit messages, README documentation, and tests, along with continuous code review. This was done to maximize learning and focus on the interesting architectural and implementation challenges.
