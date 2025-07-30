@@ -22,6 +22,7 @@ var requestCounter = prometheus.NewCounterVec(
 )
 
 func init() {
+	log.Println("Initializing metrics")
 	prometheus.MustRegister(requestCounter)
 }
 
@@ -38,6 +39,9 @@ func withMetrics(next http.Handler) http.Handler {
 }
 
 func main() {
+	log.Println("Starting server")
+
+	log.Println("Getting kubernetes configuration")
 	config, err := getKubeConfig()
 	if err != nil {
 		log.Println("could not get kubernetes configuration", err.Error())
@@ -59,7 +63,7 @@ func main() {
 
 	http.Handle("/metrics", promhttp.Handler())
 
-	log.Println("Listening on :8084")
+	log.Println("Ready to serve on :8084")
 	if err := http.ListenAndServe("0.0.0.0:8084", nil); err != nil {
 		log.Fatal(err)
 	}
