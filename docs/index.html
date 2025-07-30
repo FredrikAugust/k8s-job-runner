@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes Job Runner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Kubernetes Job Runner</h1>
+            <p class="subtitle">A simple HTTP service that creates Kubernetes jobs from shell commands. Includes Prometheus metrics.</p>
+            <div class="badges">
+                <img src="https://github.com/fredrikaugust/k8s-job-runner/actions/workflows/ci.yml/badge.svg" alt="CI Status">
+            </div>
+        </header>
+
+        <div class="warning">
+            <h3>⚠️ Security Warning</h3>
+            <p>This is a learning project and should not be used in production. It has no authentication, authorization, or input validation, allowing anyone to execute arbitrary commands in your Kubernetes cluster.</p>
+        </div>
+
+        <main>
+            <section class="features">
+                <h2>Features</h2>
+                <ul>
+                    <li>🔧 Simple HTTP API for job creation</li>
+                    <li>📊 Prometheus metrics integration</li>
+                    <li>🏷️ Automatic job labeling and tracking</li>
+                    <li>🐳 Docker support with multi-stage builds</li>
+                    <li>⚙️ Custom image and namespace support</li>
+                </ul>
+            </section>
+
+            <section class="usage">
+                <h2>Quick Start</h2>
+                <div class="code-block">
+                    <h3>Run with Docker</h3>
+                    <pre><code>docker run -p 8084:8084 ghcr.io/fredrikaugust/k8s-job-runner:latest</code></pre>
+                </div>
+                
+                <div class="code-block">
+                    <h3>Create a Job</h3>
+                    <pre><code>curl -X POST http://localhost:8084/jobs \
+  -H "Content-Type: application/json" \
+  -d '{"name": "my-job", "command": ["echo", "hello world"]}'</code></pre>
+                </div>
+
+                <div class="code-block">
+                    <h3>Custom Image & Namespace</h3>
+                    <pre><code>curl -X POST http://localhost:8084/jobs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "my-job",
+    "command": ["python", "-c", "print(\"Hello\")"],
+    "image": "python:3.9-slim",
+    "k8s_namespace": "custom-namespace"
+  }'</code></pre>
+                </div>
+            </section>
+
+            <section class="endpoints">
+                <h2>API Endpoints</h2>
+                <div class="endpoint">
+                    <span class="method">POST</span>
+                    <span class="path">/jobs</span>
+                    <span class="desc">Create a new job</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/health</span>
+                    <span class="desc">Health check</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="path">/metrics</span>
+                    <span class="desc">Prometheus metrics</span>
+                </div>
+            </section>
+
+            <section class="metrics">
+                <h2>Available Metrics</h2>
+                <ul>
+                    <li><code>http_requests_total</code> - Total HTTP requests by path and method</li>
+                    <li><code>running_jobs</code> - Current number of running jobs (gauge)</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <div class="links">
+                <a href="https://github.com/fredrikaugust/k8s-job-runner" target="_blank">📦 Source Code</a>
+                <a href="https://github.com/fredrikaugust/k8s-job-runner/pkgs/container/k8s-job-runner" target="_blank">🐳 Docker Images</a>
+            </div>
+            <p class="license">Licensed under GPL v3.0</p>
+            <p class="ai-note">💡 AI was used in this project for writing commit messages, README documentation, and tests, along with continuous code review.</p>
+        </footer>
+    </div>
+</body>
+</html>
