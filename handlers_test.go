@@ -221,4 +221,3 @@ func TestHandleCreateJobWithFields(t *testing.T) {
 		})
 	}
 }
-

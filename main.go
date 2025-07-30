@@ -23,7 +23,11 @@ var requestCounter = prometheus.NewCounterVec(
 
 func init() {
 	log.Println("Initializing metrics")
-	prometheus.MustRegister(requestCounter)
+
+	prometheus.MustRegister(
+		requestCounter,
+		runningGauge,
+	)
 }
 
 func withMetrics(next http.Handler) http.Handler {
@@ -53,6 +57,9 @@ func main() {
 		log.Println("could not get kubernetes connection", err.Error())
 		return
 	}
+
+	log.Println("Creating informer")
+	createInformer(clientset)
 
 	app := &App{
 		jobService: NewK8sClient(clientset, "default"),

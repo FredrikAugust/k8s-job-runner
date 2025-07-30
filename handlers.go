@@ -38,6 +38,9 @@ func (a *App) handleCreateJob(w http.ResponseWriter, r *http.Request) {
 	job := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: req.Name + "-" + fmt.Sprint(time.Now().Unix()),
+			Labels: map[string]string{
+				"app.kubernetes.io/managed-by": "k8s-job-runner",
+			},
 		},
 		Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
