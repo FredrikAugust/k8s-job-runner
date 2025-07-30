@@ -1,6 +1,6 @@
 # Kubernetes Job Runner
 
-A simple HTTP service that creates Kubernetes jobs from shell commands.
+A simple HTTP service that creates Kubernetes jobs from shell commands. Includes Prometheus metrics.
 
 ## Usage
 
@@ -33,6 +33,11 @@ curl -X POST http://localhost:8084/jobs \
 - `POST /jobs` - Create a new job
 - `GET /health` - Health check
 - `GET /metrics` - Prometheus metrics
+
+## Metrics
+
+- `http_requests_total` - Total HTTP requests by path and method
+- `running_jobs` - Current number of running jobs (gauge)
 
 ## Configuration
 
