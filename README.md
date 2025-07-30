@@ -55,4 +55,4 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 ---
 
 > [!NOTE]
-> AI was used in this project for writing commit messages, README documentation, and tests, along with continuous code review. This was done to maximize learning and focus on the interesting architectural and implementation challenges.
+> AI was used in this project for writing commit messages, README documentation, and tests, along with continuous code review. This was done to maximize learning and focus on the interesting parts.
