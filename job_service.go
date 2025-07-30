@@ -9,7 +9,7 @@ import (
 )
 
 type JobService interface {
-	CreateJob(ctx context.Context, job *batchv1.Job) (*batchv1.Job, error)
+	CreateJob(ctx context.Context, job *batchv1.Job, namespace string) (*batchv1.Job, error)
 }
 
 type K8sClient struct {
@@ -23,6 +23,6 @@ func NewK8sClient(client *kubernetes.Clientset, namespace string) *K8sClient {
 	}
 }
 
-func (k *K8sClient) CreateJob(ctx context.Context, job *batchv1.Job) (*batchv1.Job, error) {
-	return k.client.BatchV1().Jobs(k.namespace).Create(ctx, job, metav1.CreateOptions{})
+func (k *K8sClient) CreateJob(ctx context.Context, job *batchv1.Job, namespace string) (*batchv1.Job, error) {
+	return k.client.BatchV1().Jobs(namespace).Create(ctx, job, metav1.CreateOptions{})
 }
