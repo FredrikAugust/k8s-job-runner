@@ -1,5 +1,10 @@
 # Kubernetes Job Runner
 
+[![CI](https://github.com/fredrikaugust/k8s-job-runner/actions/workflows/ci.yml/badge.svg)](https://github.com/fredrikaugust/k8s-job-runner/actions/workflows/ci.yml)
+
+> [!WARNING]
+> This is a learning project and should not be used in production. It has no authentication, authorization, or input validation, allowing anyone to execute arbitrary commands in your Kubernetes cluster.
+
 A simple HTTP service that creates Kubernetes jobs from shell commands. Includes Prometheus metrics.
 
 ## Usage
